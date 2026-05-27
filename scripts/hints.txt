@@ -4,24 +4,54 @@ DECODED SECURITY - HASHING LAB HINTS
 STEP 1: Look at the hashes
   cat /lab/hashes.txt
 
-STEP 2: Generate your own MD5 hash to understand the format
+STEP 2: Generate your own hash to understand the format
   echo -n "password" | md5sum
   echo -n "password" | sha1sum
 
-STEP 3: Crack MD5 hashes with John the Ripper
-  john --format=raw-md5 --wordlist=/lab/wordlists/decoded_wordlist.txt /lab/hashes_md5.txt
+  Compare the output to Target 1 in hashes.txt. They match exactly.
+  Same input. Always same output. No randomness. That is the problem.
 
-STEP 4: See the cracked passwords
-  john --format=raw-md5 --show /lab/hashes_md5.txt
+STEP 3: Run the dictionary attack on MD5 hashes
+  python3 /lab/scripts/crack.py /lab/hashes_md5.txt /lab/wordlists/decoded_wordlist.txt md5
 
-STEP 5: Try cracking SHA-1 hashes
-  john --format=raw-sha1 --wordlist=/lab/wordlists/decoded_wordlist.txt /lab/hashes_sha1.txt
+  Watch how fast it cracks. Count the attempts. Note the time in seconds.
 
-STEP 6: Try cracking the bcrypt hash
-  john --format=bcrypt --wordlist=/lab/wordlists/decoded_wordlist.txt /lab/hashes_bcrypt.txt
+STEP 4: Run the dictionary attack on SHA-1
+  python3 /lab/scripts/crack.py /lab/hashes_sha1.txt /lab/wordlists/decoded_wordlist.txt sha1
+
+  Same password. Different algorithm. Same result.
+
+STEP 5: See what salting does
+  python3 -c "
+  import hashlib
+  password = 'password'
+  no_salt  = hashlib.md5(password.encode()).hexdigest()
+  salted   = hashlib.md5((password + 'x7k2mR9q').encode()).hexdigest()
+  print('No salt :', no_salt)
+  print('Salted  :', salted)
+  print('Match?  :', no_salt == salted)
+  "
+
+  The salted hash is completely different. The attacker's precomputed table is useless.
+
+STEP 6: Try bcrypt (the one that holds)
+  pip3 install bcrypt --break-system-packages -q && python3 -c "
+  import bcrypt, time
+  target = b'\$2b\$12\$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8t2iL.Uz3I6jHq4k8Wy'
+  words = open('/lab/wordlists/decoded_wordlist.txt').read().splitlines()
+  print('Trying 10 passwords against bcrypt...')
+  start = time.time()
+  for i, w in enumerate(words[:10]):
+      result = bcrypt.checkpw(w.encode(), target)
+      print(f'  {i+1}. {w}: {\"MATCH\" if result else \"no match\"}')
+  elapsed = time.time() - start
+  print(f'\n10 attempts: {elapsed:.2f}s  |  ~{elapsed/10:.2f}s per attempt')
+  print(f'Your wordlist has {len(words)} passwords. Estimated: {len(words)*elapsed/10:.0f}s total.')
+  "
 
 KEY QUESTIONS:
-  - Which hashes cracked immediately?
-  - Which hash did NOT crack? Why?
-  - What is the difference between MD5 and bcrypt?
-  - What would salting have changed?
+  - Which MD5 hashes cracked? How many attempts did it take?
+  - Which hash did NOT crack? Why not?
+  - How long did bcrypt take per attempt vs MD5?
+  - What would salting have changed for the MD5 attack?
+  - What does this mean for password policy in a real organisation?

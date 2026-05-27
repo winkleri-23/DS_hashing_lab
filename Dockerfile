@@ -7,10 +7,8 @@ LABEL version="1.0"
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y \
-    john \
     python3 \
     python3-pip \
-    hashcat \
     nano \
     vim \
     less \
@@ -24,9 +22,10 @@ COPY hashes_sha1.txt /lab/hashes_sha1.txt
 COPY hashes_bcrypt.txt /lab/hashes_bcrypt.txt
 COPY wordlists/decoded_wordlist.txt /lab/wordlists/decoded_wordlist.txt
 COPY scripts/welcome.sh /lab/scripts/welcome.sh
+COPY scripts/crack.py /lab/scripts/crack.py
 COPY scripts/hints.txt /lab/hints.txt
 
-RUN chmod +x /lab/scripts/welcome.sh
+RUN chmod +x /lab/scripts/welcome.sh /lab/scripts/crack.py
 
 WORKDIR /lab
 
