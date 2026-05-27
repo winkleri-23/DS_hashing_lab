@@ -1,0 +1,20 @@
+# Decoded Security - Password Cracking Lab
+# These are hashed passwords recovered from a simulated database breach
+
+# Target 1 - MD5, no salt
+5f4dcc3b5aa765d61d8327deb882cf99:md5:common_password
+
+# Target 2 - MD5, no salt
+482c811da5d5b4bc6d497ffa98491e38:md5:common_password_with_numbers
+
+# Target 3 - MD5, no salt
+e10adc3949ba59abbe56e057f20f883e:md5:very_common
+
+# Target 4 - MD5, no salt
+b3a6db5b8b0e7d9c2a5f4e8c1d7a2b9f:md5:not_in_wordlist
+
+# Target 5 - SHA-1, no salt
+5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8:sha1:same_as_target1_different_algorithm
+
+# Target 6 - bcrypt
+$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8t2iL.Uz3I6jHq4k8Wy:bcrypt:bcrypt_protected

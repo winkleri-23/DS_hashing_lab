@@ -1,0 +1,27 @@
+DECODED SECURITY - HASHING LAB HINTS
+=====================================
+
+STEP 1: Look at the hashes
+  cat /lab/hashes.txt
+
+STEP 2: Generate your own MD5 hash to understand the format
+  echo -n "password" | md5sum
+  echo -n "password" | sha1sum
+
+STEP 3: Crack MD5 hashes with John the Ripper
+  john --format=raw-md5 --wordlist=/lab/wordlists/decoded_wordlist.txt /lab/hashes_md5.txt
+
+STEP 4: See the cracked passwords
+  john --format=raw-md5 --show /lab/hashes_md5.txt
+
+STEP 5: Try cracking SHA-1 hashes
+  john --format=raw-sha1 --wordlist=/lab/wordlists/decoded_wordlist.txt /lab/hashes_sha1.txt
+
+STEP 6: Try cracking the bcrypt hash
+  john --format=bcrypt --wordlist=/lab/wordlists/decoded_wordlist.txt /lab/hashes_bcrypt.txt
+
+KEY QUESTIONS:
+  - Which hashes cracked immediately?
+  - Which hash did NOT crack? Why?
+  - What is the difference between MD5 and bcrypt?
+  - What would salting have changed?
