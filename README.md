@@ -50,6 +50,5 @@ This lab accompanies the Decoded Security article:
 
 Read it at [decodedsecurity.com](https://www.decodedsecurity.com)
 
----
 
-*Built by [Decoded Security](https://www.decodedsecurity.com) — Cybersecurity explained without the fluff.*
+*Built by [Decoded Security](https://www.decodedsecurity.com) 
